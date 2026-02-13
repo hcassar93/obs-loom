@@ -587,12 +587,10 @@ local function uploadRealVideo(filePath, fileName)
     obsLoom.isUploading = true
     obsLoom.updateMenuBar()
 
-    -- Delete placeholder, upload real video, set ACL
+    -- Upload real video (overwrites placeholder), set ACL
     local uploadCmd = string.format(
-        "%s rm 'gs://%s/%s' 2>&1 || echo 'No placeholder to delete'; " ..
         "%s -h 'Content-Type:video/mp4' -h 'Cache-Control:no-cache, no-store, must-revalidate' cp '%s' 'gs://%s/%s' && " ..
         "%s acl ch -u AllUsers:R 'gs://%s/%s'",
-        gsutilPath, gcsBucket, gcsPath,
         gsutilPath, filePath, gcsBucket, gcsPath,
         gsutilPath, gcsBucket, gcsPath
     )
