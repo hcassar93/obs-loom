@@ -564,7 +564,6 @@ local function uploadPlaceholder(fileName)
         hs.task.new("/bin/sh", function(exitCode, stdout, stderr)
             if exitCode == 0 then
                 hs.pasteboard.setContents(publicUrl)
-                hs.alert.show("🔗 URL copied to clipboard!")
                 print("obs-loom: ✅ Placeholder uploaded, URL in clipboard: " .. publicUrl)
             else
                 print("obs-loom: ❌ Placeholder upload failed: " .. tostring(stderr))
@@ -683,7 +682,7 @@ local function onNewFileDetected(filePath, fileName)
                 obsLoom.stopSourceCapture()
 
                 -- Upload real video
-                hs.alert.show("⬆️ Uploading video...")
+                hs.alert.show("🔗 URL in clipboard — uploading video...")
                 uploadRealVideo(filePath, fileName)
 
                 obsLoom.activeFile = nil
