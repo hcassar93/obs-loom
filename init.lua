@@ -47,6 +47,17 @@ function string:trim()
     return self:match("^%s*(.-)%s*$")
 end
 
+-- Utility: URL encode a string
+local function urlEncode(str)
+    if str then
+        str = string.gsub(str, "\n", "\r\n")
+        str = string.gsub(str, "([^%w _%%%-%.~])",
+            function(c) return string.format("%%%02X", string.byte(c)) end)
+        str = string.gsub(str, " ", "%%20")
+    end
+    return str
+end
+
 -- Find gsutil path
 local function findGsutilPath()
     local paths = {
@@ -544,7 +555,8 @@ local function uploadPlaceholder(fileName)
 
     local baseName = fileName:match("(.+)%.mp4$") or fileName
     local gcsPath = baseName .. ".mp4"
-    local publicUrl = string.format("https://storage.googleapis.com/%s/%s", gcsBucket, gcsPath)
+    local encodedGcsPath = urlEncode(gcsPath)
+    local publicUrl = string.format("https://storage.googleapis.com/%s/%s", gcsBucket, encodedGcsPath)
 
     print("obs-loom: Uploading placeholder for " .. gcsPath)
 
